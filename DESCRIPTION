@@ -1,0 +1,22 @@
+Package: gam.matrix
+Type: Package
+Title: Continuous and Dichotomized Index Predictors Based on
+       Distribution Quantiles
+Version: 0.1.7
+Date: 2025-01-17
+Description: gam_matrix.
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Encoding: UTF-8
+License: GPL-2
+Depends: R (>= 4.4)
+Language: en-US
+Authors@R: c(person(given = 'Tingting', family = 'Zhan', role =
+       c('aut', 'cre'), email =
+       c('tingtingzhan@gmail.com'), comment = c(ORCID =
+       '0000-0001-9971-4844')), person(given = 'Inna', family =
+       'Chervoneva', role = c('aut'), email =
+       'Inna.Chervoneva@jefferson.edu', comment = c(ORCID =
+       '0000-0002-9104-4505')))
+Imports: cli, mgcv, plotly
+Suggests: knitr, survival, matrixStats, htmlwidgets, spatstat.grouped.data, spatstat.grouped
