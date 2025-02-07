@@ -52,7 +52,7 @@ predict.gam_matrix <- function(
 ) {
   
   xname <- attr(object, which = 'xname', exact = TRUE)
-  newdata <- data_augment_gam_matrix(data = newdata, xname = xname)
+  newdata <- augdata(data = newdata, xname = xname)
   
   # do we really need to check the `$x` and `$L` of `newdata` and `olddata` being the same???
   # from tzh's previous code, we do need to check '$L' are the same

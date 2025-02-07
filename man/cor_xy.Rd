@@ -24,3 +24,6 @@ Function \link{cor_xy.gam_matrix} returns a \link[base]{numeric} scalar or \link
 \description{
 \eqn{xy}-Correlation
 }
+\details{
+..
+}

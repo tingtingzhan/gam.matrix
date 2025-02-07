@@ -1,68 +1,91 @@
 
 
-#' @title \link[mgcv]{gam} with one-and-only-one \link[base]{matrix} predictor
+#' @title \link[mgcv]{gam} with \link[base]{matrix} predictor
 #' 
-#' @param formula \link[stats]{formula}, e.g., `y~X`. 
-#' Response \eqn{y} may be \link[base]{double}, \link[base]{logical} and \link[survival]{Surv}.
-#' Functional predictor \eqn{X} is a \link[base]{double} \link[base]{matrix}.
-#' The \link[base]{colnames} of \eqn{X} must be convertible to \link[base]{numeric} \link[base]{vector},
-#' indicating the *common tabulating grid* shared by all subjects.
+#' @description
+#' A generalized additive model \link[mgcv]{gam} with one-and-only-one \link[base]{matrix} predictor.
+#' 
+#' 
+#' @param formula \link[stats]{formula}, e.g., `y~X`, in which
+#' \itemize{
+#' \item {Response \eqn{y} may be \link[base]{double}, \link[base]{logical} and \link[survival]{Surv}}
+#' \item {Predictor \eqn{X} is a \link[base]{double} \link[base]{matrix},
+#' the \link[base]{colnames} of which must be convertible to \link[base]{numeric} \link[base]{vector},
+#' indicating a *common tabulating grid* shared by all subjects.}
+#' }
 #' 
 #' @param data \link[base]{data.frame}
 #' 
 #' @param family \link[stats]{family} object, 
-#' see function \link[mgcv]{gam}.
+#' see function \link[mgcv]{gam} for details.
 #' Default values are
 #' \itemize{
 #' \item `mgcv::cox.ph()` for \link[survival]{Surv} response \eqn{y};
-#' \item `binomial(link = 'logit')` for \link[base]{logical} response \eqn{y};
-#' \item `gaussian(link = 'identity')` for \link[base]{double} response \eqn{y}
+#' \item `stats::binomial(link = 'logit')` for \link[base]{logical} response \eqn{y};
+#' \item `stats::gaussian(link = 'identity')` for \link[base]{double} response \eqn{y}
 #' }
 #' 
 #' @param nonlinear \link[base]{logical} scalar, 
 #' whether to use nonlinear or linear functional model.
 #' Default `FALSE`
 #' 
-#' @param fit see function \link[mgcv]{gam}
-#' 
 #' @param ... additional parameters for functions \link[mgcv]{s} and \link[mgcv]{ti},
 #' most importantly `k`
 #' 
-# @details 
-# Function [gam_matrix] calculates the sign-adjusted quantile indices in the following steps.
-# \enumerate{
-# \item Fit a functional model (via \link[mgcv]{gam}) 
-# of response \eqn{y} with functional predictor \eqn{X};
-# \item Obtain the \link[base]{sign}-adjustment, see section **Details** of function [integrandSurface];
-# }
-# 
-# *Sign-adjusted quantile indices*
-# are the product of 
-# `sign` (from Step 2) and `gam(.)$linear.predictors` (from Step 1).
-# Multiplication by `sign` ensures
-# that the sign-adjusted quantile indices
-# are positively correlated with the user-selected \eqn{X_{\cdot,j}}.
+#' @details
+#' Function [gam_matrix] fits a \link[mgcv]{gam} model
+#' of response \eqn{y} with matrix predictor \eqn{X}.
+#' This method was originally defined in the context of \link[stats]{quantile}.
+#' In the following text, the matrix predictor \eqn{X} is denoted as \eqn{Q(p)},
+#' where \eqn{p} is `as.numeric(colnames(X))`.
+#' 
+#' Linear quantile index, with a linear functional coefficient \eqn{\beta(p)},
+#' \deqn{\text{QI}=\displaystyle\int_0^1\beta(p)\cdot Q(p)\,dp}
+#' can be estimated by fitting a functional generalized linear model (FGLM, James, 2002) to exponential-family outcomes, 
+#' or by fitting a linear functional Cox model (LFCM, Gellar et al., 2015) to survival outcomes. 
+#' 
+#' Non-linear quantile index, with a bivariate twice differentiable function \eqn{F(\cdot,\cdot)},
+#' \deqn{\text{nlQI}=\displaystyle\int_0^1 F\big(p, Q(p)\big)\,dp}
+#' can be estimated by fitting a functional generalized additive model (FGAM, McLean et al., 2014) to exponential-family outcomes, 
+#' or by fitting an additive functional Cox model (AFCM, Cui et al., 2021) to survival outcomes. 
+#' 
+#' 
+#' 
 #' 
 #' 
 #' @returns 
-#' Function [gam_matrix] returns a [gam_matrix] object, which \link[base]{inherits} from class \link[mgcv]{gam}.
+#' Function [gam_matrix] returns a [gam_matrix] object, 
+#' which \link[base]{inherits} from class \link[mgcv]{gam}.
+#' 
+#' @references 
+#' James, G. M. (2002). *Generalized Linear Models with Functional Predictors*,
+#' \doi{10.1111/1467-9868.00342} 
+#' 
+#' Gellar, J. E., et al. (2015). *Cox regression models with functional covariates for survival data*,
+#' \doi{10.1177/1471082X14565526}
+#' 
+#' Mathew W. M., et al. (2014) *Functional Generalized Additive Models*,
+#' \doi{10.1080/10618600.2012.729985}
+#' 
+#' Cui, E., et al. (2021). *Additive Functional Cox Model*,
+#' \doi{10.1080/10618600.2020.1853550}
 #' 
 #' 
 #' @examples 
 #' # see ?`gam.matrix-package`
+#' 
 #' @importFrom mgcv gam cox.ph s ti
 #' @importFrom stats binomial gaussian
 #' @export
 gam_matrix <- function(
     formula, data,
     family,
-    fit = TRUE,
     nonlinear = FALSE,
     ...
 ) {
 
   xname <- formula[[3L]] # right-hand-side
-  data <- data_augment_gam_matrix(data = data, xname = xname)
+  data_aug <- augdata(data = data, xname = xname)
   
   trm_ <- if (nonlinear) as.call(list(
     quote(ti), 
@@ -86,8 +109,7 @@ gam_matrix <- function(
   
   gam_cl <- call(
     name = 'gam', 
-    fit = fit,
-    data = quote(data),
+    data = quote(data_aug),
     control = list(keepData = TRUE)
   ) 
   
@@ -109,7 +131,10 @@ gam_matrix <- function(
   ret <- eval(gam_cl) # 'gam' if `fit = TRUE`; 'gam.prefit' if `fit = FALSE`
   
   attr(ret, which = 'xname') <- xname
-  if (fit) class(ret) <- c('gam_matrix', class(ret))
+  if (inherits(ret, what = 'gam')) {
+    # instead of 'gam.prefit' (when `fit = FALSE`)
+    class(ret) <- c('gam_matrix', class(ret))
+  }
   return(ret)
   
 }
@@ -121,7 +146,7 @@ gam_matrix <- function(
 
 
 #' @importFrom cli col_blue col_magenta
-data_augment_gam_matrix <- function(
+augdata <- function(
     data, xname
 ) {
   

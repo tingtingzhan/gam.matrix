@@ -101,19 +101,6 @@ Currently, the projection to \eqn{(p,q)}-plain is hard coded on \eqn{(p,q,s=\tex
 \section{Integrand Surface}{
 
 
-The quantile index (QI),
-\deqn{\text{QI}=\displaystyle\int_0^1\beta(p)\cdot Q(p)\,dp}
-with a linear functional coefficient \eqn{\beta(p)}
-can be estimated by fitting a functional generalized linear model (FGLM, James, 2002) to exponential-family outcomes,
-or by fitting a linear functional Cox model (LFCM, Gellar et al., 2015) to survival outcomes.
-More flexible non-linear quantile index (nlQI)
-\deqn{
-\text{nlQI}=\displaystyle\int_0^1 F\big(p, Q(p)\big)\,dp
-}
-with a bivariate twice differentiable function \eqn{F(\cdot,\cdot)}
-can be estimated by fitting a functional generalized additive model (FGAM, McLean et al., 2014) to exponential-family outcomes,
-or by fitting an additive functional Cox model (AFCM, Cui et al., 2021) to survival outcomes.
-
 The estimated \strong{integrand surface} of quantile indices and non-linear quantile indices, defined on
 \eqn{p\in[0,1]} and
 \eqn{q\in\text{range}\big(Q_i(p)\big)} for all training subjects \eqn{i=1,\cdots,n},
@@ -155,17 +142,4 @@ are positively correlated with subject-specific sample medians
 
 \examples{
 # see ?`gam.matrix-package`
-}
-\references{
-James, G. M. (2002). \emph{Generalized Linear Models with Functional Predictors},
-\doi{10.1111/1467-9868.00342}
-
-Gellar, J. E., et al. (2015). \emph{Cox regression models with functional covariates for survival data},
-\doi{10.1177/1471082X14565526}
-
-Mathew W. M., et al. (2014) \emph{Functional Generalized Additive Models},
-\doi{10.1080/10618600.2012.729985}
-
-Cui, E., et al. (2021). \emph{Additive Functional Cox Model},
-\doi{10.1080/10618600.2020.1853550}
 }

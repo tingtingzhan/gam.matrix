@@ -18,6 +18,19 @@ cor_xy <- function(object, ...) UseMethod(generic = 'cor_xy')
 #' @param probs \link[base]{numeric} scalar or \link[base]{vector} \eqn{\tilde{p}}, 
 #' taking values between 0 and 1, see function \link[stats]{quantile}.
 #' 
+#' @details ..
+# calculates the sign-adjusted quantile indices in the following steps.
+# \enumerate{
+# \item Obtain the \link[base]{sign}-adjustment, see section **Details** of function [integrandSurface];
+# }
+# 
+# *Sign-adjusted quantile indices*
+# are the product of 
+# `sign` (from Step 2) and `gam(.)$linear.predictors` (from Step 1).
+# Multiplication by `sign` ensures
+# that the sign-adjusted quantile indices
+# are positively correlated with the user-selected \eqn{X_{\cdot,j}}.
+#' 
 #' @returns
 #' Function [cor_xy.gam_matrix] returns a \link[base]{numeric} scalar or \link[base]{vector} of 
 #' \link[stats]{cor}relation(s).

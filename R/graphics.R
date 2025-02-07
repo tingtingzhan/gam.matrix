@@ -88,7 +88,7 @@ contour.gam_matrix <- function(
 }
 
 
-# this is actually another version of [data_augment_gam_matrix] !!!!!
+# this is actually another version of [augdata] !!!!!
 get_mesh.gam_matrix <- function(x, newdata, n = 501L, ...) {
   
   # I hope to use [get_mesh.gam_matrix] in [integrandSurface]

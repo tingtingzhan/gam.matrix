@@ -2,29 +2,29 @@
 % Please edit documentation in R/gam_matrix.R
 \name{gam_matrix}
 \alias{gam_matrix}
-\title{\link[mgcv]{gam} with one-and-only-one \link[base]{matrix} predictor}
+\title{\link[mgcv]{gam} with \link[base]{matrix} predictor}
 \usage{
-gam_matrix(formula, data, family, fit = TRUE, nonlinear = FALSE, ...)
+gam_matrix(formula, data, family, nonlinear = FALSE, ...)
 }
 \arguments{
-\item{formula}{\link[stats]{formula}, e.g., \code{y~X}.
-Response \eqn{y} may be \link[base]{double}, \link[base]{logical} and \link[survival]{Surv}.
-Functional predictor \eqn{X} is a \link[base]{double} \link[base]{matrix}.
-The \link[base]{colnames} of \eqn{X} must be convertible to \link[base]{numeric} \link[base]{vector},
-indicating the \emph{common tabulating grid} shared by all subjects.}
+\item{formula}{\link[stats]{formula}, e.g., \code{y~X}, in which
+\itemize{
+\item {Response \eqn{y} may be \link[base]{double}, \link[base]{logical} and \link[survival]{Surv}}
+\item {Predictor \eqn{X} is a \link[base]{double} \link[base]{matrix},
+the \link[base]{colnames} of which must be convertible to \link[base]{numeric} \link[base]{vector},
+indicating a \emph{common tabulating grid} shared by all subjects.}
+}}
 
 \item{data}{\link[base]{data.frame}}
 
 \item{family}{\link[stats]{family} object,
-see function \link[mgcv]{gam}.
+see function \link[mgcv]{gam} for details.
 Default values are
 \itemize{
 \item \code{mgcv::cox.ph()} for \link[survival]{Surv} response \eqn{y};
-\item \code{binomial(link = 'logit')} for \link[base]{logical} response \eqn{y};
-\item \code{gaussian(link = 'identity')} for \link[base]{double} response \eqn{y}
+\item \code{stats::binomial(link = 'logit')} for \link[base]{logical} response \eqn{y};
+\item \code{stats::gaussian(link = 'identity')} for \link[base]{double} response \eqn{y}
 }}
-
-\item{fit}{see function \link[mgcv]{gam}}
 
 \item{nonlinear}{\link[base]{logical} scalar,
 whether to use nonlinear or linear functional model.
@@ -34,11 +34,43 @@ Default \code{FALSE}}
 most importantly \code{k}}
 }
 \value{
-Function \link{gam_matrix} returns a \link{gam_matrix} object, which \link[base]{inherits} from class \link[mgcv]{gam}.
+Function \link{gam_matrix} returns a \link{gam_matrix} object,
+which \link[base]{inherits} from class \link[mgcv]{gam}.
 }
 \description{
-\link[mgcv]{gam} with one-and-only-one \link[base]{matrix} predictor
+A generalized additive model \link[mgcv]{gam} with one-and-only-one \link[base]{matrix} predictor.
+}
+\details{
+Function \link{gam_matrix} fits a \link[mgcv]{gam} model
+of response \eqn{y} with matrix predictor \eqn{X}.
+This method was originally defined in the context of \link[stats]{quantile}.
+In the following text, the matrix predictor \eqn{X} is denoted as \eqn{Q(p)},
+where \eqn{p} is \code{as.numeric(colnames(X))}.
+
+Linear quantile index, with a linear functional coefficient \eqn{\beta(p)},
+\deqn{\text{QI}=\displaystyle\int_0^1\beta(p)\cdot Q(p)\,dp}
+can be estimated by fitting a functional generalized linear model (FGLM, James, 2002) to exponential-family outcomes,
+or by fitting a linear functional Cox model (LFCM, Gellar et al., 2015) to survival outcomes.
+
+Non-linear quantile index, with a bivariate twice differentiable function \eqn{F(\cdot,\cdot)},
+\deqn{\text{nlQI}=\displaystyle\int_0^1 F\big(p, Q(p)\big)\,dp}
+can be estimated by fitting a functional generalized additive model (FGAM, McLean et al., 2014) to exponential-family outcomes,
+or by fitting an additive functional Cox model (AFCM, Cui et al., 2021) to survival outcomes.
 }
 \examples{
 # see ?`gam.matrix-package`
+
+}
+\references{
+James, G. M. (2002). \emph{Generalized Linear Models with Functional Predictors},
+\doi{10.1111/1467-9868.00342}
+
+Gellar, J. E., et al. (2015). \emph{Cox regression models with functional covariates for survival data},
+\doi{10.1177/1471082X14565526}
+
+Mathew W. M., et al. (2014) \emph{Functional Generalized Additive Models},
+\doi{10.1080/10618600.2012.729985}
+
+Cui, E., et al. (2021). \emph{Additive Functional Cox Model},
+\doi{10.1080/10618600.2020.1853550}
 }
