@@ -4,7 +4,7 @@
 #' 
 #' @param object ..
 #' 
-#' @param ... additional parameters, currently not in use
+#' @param ... parameters of function [cor_xy.gam_matrix]
 #' 
 #' @name sign_adjust
 #' @export
@@ -17,10 +17,15 @@ sign_adjust <- function(object, ...) UseMethod(generic = 'sign_adjust')
 sign_adjust.gam_matrix <- function(object, ...) {
   
   sgn <- object |>
-    cor_xy.gam_matrix(probs = .5) |>
+    cor_xy.gam_matrix(...) |>
     sign()
   
   return(sgn * object$linear.predictors)
+  
+  # old practice of 
+  #object$linear.predictors <- sgn * object$linear.predictors
+  #return(object)
+  # is wrong!
   
 }
 

@@ -12,7 +12,7 @@ sign_adjust(object, ...)
 \arguments{
 \item{object}{..}
 
-\item{...}{additional parameters, currently not in use}
+\item{...}{parameters of function \link{cor_xy.gam_matrix}}
 }
 \description{
 Sign Adjustment
