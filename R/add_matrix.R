@@ -77,17 +77,16 @@ add_matrix <- function(
   call.$data <- quote(data_aug)
   
   # see inside ?stats::update.default
-  #ret <- update(
-  #  object = list(call = call.), 
-  #  formula. = fom,
-  #  data = data_aug
-  #)
   ret <- eval(call.)
+  
+  # additional stuff
   attr(ret, which = 'xname') <- xname
+  
   if (inherits(ret, what = 'gam')) {
     # instead of 'gam.prefit'
     class(ret) <- c('gam_matrix', class(ret))
   }
+  
   return(ret)
 
 }
