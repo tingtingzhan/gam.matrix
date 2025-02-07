@@ -4,9 +4,54 @@
 \name{gam.matrix-package}
 \alias{gam.matrix}
 \alias{gam.matrix-package}
-\title{Continuous and Dichotomized Index Predictors Based on Distribution Quantiles}
+\title{\link[mgcv]{gam} with one-and-only-one \link[base]{matrix} Predictor}
 \description{
-..
+Function \link{gam_matrix} ..
+
+Function \link{cor_xy.gam_matrix} ..
+
+Function \link{sign_adjust.gam_matrix} ..
+
+Function \link{predict.gam_matrix} ..
+
+Functions \link{persp.gam_matrix} and \link{contour.gam_matrix} ..
+
+Function \link{integrandSurface} ..
+}
+\examples{
+library(survival)
+library(spatstat.grouped)
+data(Ki67, package = 'spatstat.grouped.data')
+Ki67 = within.data.frame(Ki67, expr = {
+ Ki67 = log1p(Ki67)
+ PFS = Surv(time = recfreesurv_mon, event = recurrence); recfreesurv_mon = recurrence = NULL
+})
+(npt = length(unique(Ki67$patientID))) # 622
+Ki67q = grouped_ppp(Ki67 ~ PFS + node + Tstage | patientID/tissueID, data = Ki67) |>
+  aggregate_quantile(by = ~ patientID, probs = seq.int(from = .01, to = .99, by = .01))
+  
+set.seed(234); id = sort.int(sample.int(n = npt, size = 500L))
+Ki67q_0 = Ki67q[id, , drop = FALSE] # training set
+Ki67q_1 = Ki67q[-id, , drop = FALSE] # test set
+
+gam0 = gam_matrix(PFS ~ Ki67.quantile, data = Ki67q_0)
+fr = sign_adjust(gam0)
+predict(gam0, newdata = Ki67q_1)
+persp(gam0)
+\donttest{
+integrandSurface(gam0)
+integrandSurface(gam0, newdata = Ki67q_1)
+} # to save time
+
+nlgam0 = gam_matrix(PFS ~ Ki67.quantile, data = Ki67q_0, nonlinear = TRUE)
+nlfr = sign_adjust(nlgam0)
+\donttest{
+integrandSurface(nlgam0)
+integrandSurface(nlgam0, newdata = Ki67q_1)
+} # to save time
+
+\donttest{integrandSurface(gam0, nlgam0)}
+
 }
 \author{
 \strong{Maintainer}: Tingting Zhan \email{tingtingzhan@gmail.com} (\href{https://orcid.org/0000-0001-9971-4844}{ORCID})

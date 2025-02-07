@@ -1,6 +1,6 @@
 
 
-#' @title \link[mgcv]{gam} with \link[base]{matrix} predictor
+#' @title \link[mgcv]{gam} with one-and-only-one \link[base]{matrix} predictor
 #' 
 #' @param formula \link[stats]{formula}, e.g., `y~X`. 
 #' Response \eqn{y} may be \link[base]{double}, \link[base]{logical} and \link[survival]{Surv}.
@@ -49,10 +49,9 @@
 #' 
 #' 
 #' @examples 
-#' # see ?oldPublication.R
+#' # see ?`gam.matrix-package`
 #' @importFrom mgcv gam cox.ph s ti
 #' @importFrom stats binomial gaussian
-#' 
 #' @export
 gam_matrix <- function(
     formula, data,

@@ -1,27 +1,54 @@
 
 
-#' @title Continuous and Dichotomized Index Predictors Based on Distribution Quantiles
+#' @title \link[mgcv]{gam} with one-and-only-one \link[base]{matrix} Predictor
 #' 
-#' @description ..
-# ## Sign-Adjusted Quantile Indices [gam_matrix]
+#' @description
 #' 
-# Function [gam_matrix] with option `nonlinear = FALSE` (default) .. training set
+#' Function [gam_matrix] ..
 #' 
-# Function [predict.gam_matrix] .. testing set
+#' Function [cor_xy.gam_matrix] ..
 #' 
-# Function [gam_matrix] with option `nonlinear = TRUE` .. training set
+#' Function [sign_adjust.gam_matrix] ..
 #' 
-# Function [predict.gam_matrix] .. testing set
+#' Function [predict.gam_matrix] ..
 #' 
-# @references 
-# *Selection of optimal quantile protein biomarkers based on cell-level immunohistochemistry data*.
-# Misung Yi, Tingting Zhan, Amy P. Peck, Jeffrey A. Hooke, Albert J. Kovatich, Craig D. Shriver, 
-# Hai Hu, Yunguang Sun, Hallgeir Rui and Inna Chervoneva. BMC Bioinformatics, 2023. \doi{10.1186/s12859-023-05408-8}
-# 
-# *Quantile index biomarkers based on single-cell expression data*.
-# Misung Yi, Tingting Zhan, Amy P. Peck, Jeffrey A. Hooke, Albert J. Kovatich, Craig D. Shriver, 
-# Hai Hu, Yunguang Sun, Hallgeir Rui and Inna Chervoneva. 
-# Laboratory Investigation, 2023. \doi{10.1016/j.labinv.2023.100158}
+#' Functions [persp.gam_matrix] and [contour.gam_matrix] ..
+#' 
+#' Function [integrandSurface] ..
+#' 
+#' @examples
+#' library(survival)
+#' library(spatstat.grouped)
+#' data(Ki67, package = 'spatstat.grouped.data')
+#' Ki67 = within.data.frame(Ki67, expr = {
+#'  Ki67 = log1p(Ki67)
+#'  PFS = Surv(time = recfreesurv_mon, event = recurrence); recfreesurv_mon = recurrence = NULL
+#' })
+#' (npt = length(unique(Ki67$patientID))) # 622
+#' Ki67q = grouped_ppp(Ki67 ~ PFS + node + Tstage | patientID/tissueID, data = Ki67) |>
+#'   aggregate_quantile(by = ~ patientID, probs = seq.int(from = .01, to = .99, by = .01))
+#'   
+#' set.seed(234); id = sort.int(sample.int(n = npt, size = 500L))
+#' Ki67q_0 = Ki67q[id, , drop = FALSE] # training set
+#' Ki67q_1 = Ki67q[-id, , drop = FALSE] # test set
+#' 
+#' gam0 = gam_matrix(PFS ~ Ki67.quantile, data = Ki67q_0)
+#' fr = sign_adjust(gam0)
+#' predict(gam0, newdata = Ki67q_1)
+#' persp(gam0)
+#' \donttest{
+#' integrandSurface(gam0)
+#' integrandSurface(gam0, newdata = Ki67q_1)
+#' } # to save time
+#' 
+#' nlgam0 = gam_matrix(PFS ~ Ki67.quantile, data = Ki67q_0, nonlinear = TRUE)
+#' nlfr = sign_adjust(nlgam0)
+#' \donttest{
+#' integrandSurface(nlgam0)
+#' integrandSurface(nlgam0, newdata = Ki67q_1)
+#' } # to save time
+#' 
+#' \donttest{integrandSurface(gam0, nlgam0)}
 #' 
 '_PACKAGE'
 

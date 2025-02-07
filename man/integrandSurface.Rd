@@ -154,7 +154,7 @@ are positively correlated with subject-specific sample medians
 }
 
 \examples{
-# see ?`Qindex-package`
+# see ?`gam.matrix-package`
 }
 \references{
 James, G. M. (2002). \emph{Generalized Linear Models with Functional Predictors},

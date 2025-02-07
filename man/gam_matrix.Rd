@@ -2,7 +2,7 @@
 % Please edit documentation in R/gam_matrix.R
 \name{gam_matrix}
 \alias{gam_matrix}
-\title{\link[mgcv]{gam} with \link[base]{matrix} predictor}
+\title{\link[mgcv]{gam} with one-and-only-one \link[base]{matrix} predictor}
 \usage{
 gam_matrix(formula, data, family, fit = TRUE, nonlinear = FALSE, ...)
 }
@@ -37,8 +37,8 @@ most importantly \code{k}}
 Function \link{gam_matrix} returns a \link{gam_matrix} object, which \link[base]{inherits} from class \link[mgcv]{gam}.
 }
 \description{
-\link[mgcv]{gam} with \link[base]{matrix} predictor
+\link[mgcv]{gam} with one-and-only-one \link[base]{matrix} predictor
 }
 \examples{
-# see ?oldPublication.R
+# see ?`gam.matrix-package`
 }

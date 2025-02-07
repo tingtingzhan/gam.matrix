@@ -146,7 +146,7 @@
 #' 
 #' 
 #' @examples 
-#' # see ?`Qindex-package`
+#' # see ?`gam.matrix-package`
 #' @importFrom mgcv predict.gam
 #' @importFrom plotly plot_ly add_paths add_surface layout
 #' @importFrom stats asOneSidedFormula predict
@@ -177,7 +177,7 @@ integrandSurface <- function(
 ) {
   
   dots <- list(...)
-  if (!all(vapply(dots, FUN = inherits, what = 'gam', FUN.VALUE = NA))) stop('all input needs to be `Qindex`')
+  if (!all(vapply(dots, FUN = inherits, what = 'gam', FUN.VALUE = NA))) stop('all input needs to be `gam.matrix`')
   
   matrix_x_ <- lapply(dots, FUN = attr, which = 'xname', exact = TRUE)
   if (!all(duplicated.default(matrix_x_)[-1L])) stop()
