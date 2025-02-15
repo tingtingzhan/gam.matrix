@@ -14,7 +14,7 @@
 #' @examples
 #' # see ?`gam.matrix-package`
 #' 
-#' @importFrom mgcv gam cox.ph s ti
+#' @importFrom mgcv gam s ti
 #' @importFrom stats update.formula
 #' @export
 add_matrix <- function(
@@ -57,7 +57,8 @@ add_matrix <- function(
   
   if (
     length(call.$family) && 
-    identical(eval(call.$family[[1L]]), cox.ph, ignore.environment = TRUE) &&
+    # identical(eval(call.$family[[1L]]), cox.ph, ignore.environment = TRUE) &&
+    (eval(call.$family)$family == 'Cox PH') && # mgcv::cox.ph() return
     !length(call.$weight)
   ) {
     fom <- call.$formula

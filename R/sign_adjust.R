@@ -4,7 +4,7 @@
 #' 
 #' @param object ..
 #' 
-#' @param ... parameters of function [cor_xy.gam_matrix]
+#' @param ... parameters of function [cor_xy.gam]
 #' 
 #' @name sign_adjust
 #' @export
@@ -17,7 +17,7 @@ sign_adjust <- function(object, ...) UseMethod(generic = 'sign_adjust')
 sign_adjust.gam_matrix <- function(object, ...) {
   
   sgn <- object |>
-    cor_xy.gam_matrix(...) |>
+    cor_xy.gam(...) |>
     sign()
   
   return(sgn * object$linear.predictors)

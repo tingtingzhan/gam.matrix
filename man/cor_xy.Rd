@@ -2,12 +2,12 @@
 % Please edit documentation in R/cor_xy.R
 \name{cor_xy}
 \alias{cor_xy}
-\alias{cor_xy.gam_matrix}
+\alias{cor_xy.gam}
 \title{\eqn{xy}-Correlation}
 \usage{
 cor_xy(object, ...)
 
-\method{cor_xy}{gam_matrix}(object, probs = 0.5, ...)
+\method{cor_xy}{gam}(object, probs = 0.5, ...)
 }
 \arguments{
 \item{object}{a \link{gam_matrix} object}
@@ -18,7 +18,7 @@ cor_xy(object, ...)
 taking values between 0 and 1, see function \link[stats]{quantile}.}
 }
 \value{
-Function \link{cor_xy.gam_matrix} returns a \link[base]{numeric} scalar or \link[base]{vector} of
+Function \link{cor_xy.gam} returns a \link[base]{numeric} scalar or \link[base]{vector} of
 \link[stats]{cor}relation(s).
 }
 \description{
