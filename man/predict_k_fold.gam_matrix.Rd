@@ -4,15 +4,47 @@
 \alias{predict_k_fold.gam_matrix}
 \title{Predict via Cross Validation}
 \usage{
-predict_k_fold.gam_matrix(object, k, ...)
+predict_k_fold.gam_matrix(
+  object,
+  k,
+  mc.cores = switch(.Platform$OS.type, windows = 1L, detectCores()),
+  ...
+)
 }
 \arguments{
 \item{object}{a \link{gam_matrix} object}
 
 \item{k}{\link[base]{integer} scalar}
 
+\item{mc.cores}{\link[base]{integer} scalar, see function \link[parallel]{mclapply}}
+
 \item{...}{additional parameters, currently not in use}
+}
+\value{
+Function \link{predict_k_fold.gam_matrix} returns a \link[base]{list}.
 }
 \description{
 Predict via Cross Validation
+}
+\examples{
+data(wrobel_lung, package = 'spatstat.grouped.data')
+library(spatstat.grouped)
+lungQp = grouped_ppp(hladr ~ OS | patient_id/image_id, f_sum_ = 'min', data = wrobel_lung) |> 
+ aggregate_quantile(by = ~ patient_id, probs = seq.int(from = .05, to = .95, by = .01))
+m = gam_matrix(OS ~ hladr.quantile, data = lungQp, nonlinear = FALSE)
+
+set.seed(145); pred = predict_k_fold.gam_matrix(m, k = 10L)
+
+with(pred, boxplot(est ~ fold))
+with(pred, boxplot(est.k ~ fold)) 
+with(pred, boxplot(est.global ~ fold)) 
+table(pred$signadj)
+
+lungQp. = data.frame(lungQp, pred[c('est', 'est.k', 'est.global')])
+
+library(survival)
+summary(coxph(OS ~ est, data = lungQp.))
+summary(coxph(OS ~ est.k, data = lungQp.))
+summary(coxph(OS ~ est.global, data = lungQp.))
+
 }
