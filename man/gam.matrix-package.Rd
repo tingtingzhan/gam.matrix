@@ -47,7 +47,7 @@ m0b = quote(gam(formula = PFS ~ 1, data = Ki67q, family = cox.ph())) |>
 
 #fr = sign_adjust(m0)
 #predict(m0, newdata = Ki67q_1)
-predict_k_fold.gam_matrix(m0, k = 10L)
+m0 |> predict_k_fold.gam_matrix(k = 10L)
 persp(m0)
 \donttest{
 # integrandSurface(gam_matrix(PFS ~ Ki67.quantile, data = Ki67q_0)) # correct
@@ -60,7 +60,7 @@ m1b = quote(gam(formula = PFS ~ 1, data = Ki67q, family = cox.ph())) |>
  add_matrix(~ Ki67.quantile, nonlinear = TRUE)
 #which(!mapply(ThomasJeffersonUniv::relaxed_identical, m1, m1b))
 
-predict_k_fold.gam_matrix(m1, k = 10L)
+m1 |> predict_k_fold.gam_matrix(k = 10L)
 \donttest{
 integrandSurface(m1)
 #integrandSurface(m1, newdata = Ki67q_1)
